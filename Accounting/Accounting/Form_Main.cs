@@ -11,14 +11,6 @@ namespace Accounting
 {
 	public partial class Form_Main : Form
 	{
-		
-
-        private Calendar_Control CalendarControl = new Calendar_Control();
-
-        private Items_Control ItemsControl = new Items_Control();
-
-        private Control MyControl;
-
 		public Form_Main()
 		{
 			InitializeComponent();
@@ -211,7 +203,12 @@ namespace Accounting
                 textBox_item.Text = MyListView.SelectedItems[0].Text;
                 textBox_price_listview.Text = ItemsControl.GetMoney(MyListView.SelectedItems[0].Text).ToString();
             }
-        }	
+        }
+        private Calendar_Control CalendarControl = new Calendar_Control();
+
+        private Items_Control ItemsControl = new Items_Control();
+
+        private Control MyControl;
 
 	}
 }
