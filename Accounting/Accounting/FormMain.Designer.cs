@@ -1,6 +1,6 @@
 ﻿namespace Accounting
 {
-	partial class Form_Main
+	partial class FormMain
 	{
 		/// <summary>
 		/// 設計工具所需的變數。
@@ -28,19 +28,19 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-            this.button_enter_calendar = new System.Windows.Forms.Button();
+            this.ButtonEnterCalendar = new System.Windows.Forms.Button();
             this.MyMonthCalendar = new System.Windows.Forms.MonthCalendar();
             this.label_date = new System.Windows.Forms.Label();
             this.textBox_price_calendar = new System.Windows.Forms.TextBox();
             this.label_price_calendar = new System.Windows.Forms.Label();
             this.MyListView = new System.Windows.Forms.ListView();
             this.label_item = new System.Windows.Forms.Label();
-            this.textBox_item = new System.Windows.Forms.TextBox();
+            this.textBox_item_name = new System.Windows.Forms.TextBox();
             this.label_price_listview = new System.Windows.Forms.Label();
-            this.textBox_price_listview = new System.Windows.Forms.TextBox();
-            this.button_addList = new System.Windows.Forms.Button();
-            this.button_delete_list = new System.Windows.Forms.Button();
-            this.button_SaveFile = new System.Windows.Forms.Button();
+            this.textBox_item_price = new System.Windows.Forms.TextBox();
+            this.ButtonAddList = new System.Windows.Forms.Button();
+            this.ButtonDeleteList = new System.Windows.Forms.Button();
+            this.ButtonSaveFile = new System.Windows.Forms.Button();
             this.label_calendar_Price = new System.Windows.Forms.Label();
             this.label_Items_Price = new System.Windows.Forms.Label();
             this.label_Totoal_Calendar = new System.Windows.Forms.Label();
@@ -50,20 +50,21 @@
             this.label_Choose_Date = new System.Windows.Forms.Label();
             this.My_menuStrip = new System.Windows.Forms.MenuStrip();
             this.filesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.OpenFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.SaveFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ButtonCheckSaveToExcel = new System.Windows.Forms.Button();
             this.My_menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
-            // button_enter_calendar
+            // ButtonEnterCalendar
             // 
-            this.button_enter_calendar.Location = new System.Drawing.Point(81, 137);
-            this.button_enter_calendar.Name = "button_enter_calendar";
-            this.button_enter_calendar.Size = new System.Drawing.Size(108, 21);
-            this.button_enter_calendar.TabIndex = 0;
-            this.button_enter_calendar.Text = "Enter to Calendar";
-            this.button_enter_calendar.UseVisualStyleBackColor = true;
-            this.button_enter_calendar.Click += new System.EventHandler(this.button_enter_calendar_Click);
+            this.ButtonEnterCalendar.Location = new System.Drawing.Point(81, 137);
+            this.ButtonEnterCalendar.Name = "ButtonEnterCalendar";
+            this.ButtonEnterCalendar.Size = new System.Drawing.Size(108, 21);
+            this.ButtonEnterCalendar.TabIndex = 0;
+            this.ButtonEnterCalendar.Text = "Enter to Calendar";
+            this.ButtonEnterCalendar.UseVisualStyleBackColor = true;
+            this.ButtonEnterCalendar.Click += new System.EventHandler(this.ButtonEnterCalendarClick);
             // 
             // MyMonthCalendar
             // 
@@ -118,12 +119,12 @@
             this.label_item.TabIndex = 8;
             this.label_item.Text = "Item :";
             // 
-            // textBox_item
+            // textBox_item_name
             // 
-            this.textBox_item.Location = new System.Drawing.Point(391, 46);
-            this.textBox_item.Name = "textBox_item";
-            this.textBox_item.Size = new System.Drawing.Size(100, 22);
-            this.textBox_item.TabIndex = 9;
+            this.textBox_item_name.Location = new System.Drawing.Point(391, 46);
+            this.textBox_item_name.Name = "textBox_item_name";
+            this.textBox_item_name.Size = new System.Drawing.Size(100, 22);
+            this.textBox_item_name.TabIndex = 9;
             // 
             // label_price_listview
             // 
@@ -134,42 +135,42 @@
             this.label_price_listview.TabIndex = 10;
             this.label_price_listview.Text = "Price:";
             // 
-            // textBox_price_listview
+            // textBox_item_price
             // 
-            this.textBox_price_listview.Location = new System.Drawing.Point(391, 82);
-            this.textBox_price_listview.Name = "textBox_price_listview";
-            this.textBox_price_listview.Size = new System.Drawing.Size(100, 22);
-            this.textBox_price_listview.TabIndex = 11;
+            this.textBox_item_price.Location = new System.Drawing.Point(391, 82);
+            this.textBox_item_price.Name = "textBox_item_price";
+            this.textBox_item_price.Size = new System.Drawing.Size(100, 22);
+            this.textBox_item_price.TabIndex = 11;
             // 
-            // button_addList
+            // ButtonAddList
             // 
-            this.button_addList.Location = new System.Drawing.Point(323, 137);
-            this.button_addList.Name = "button_addList";
-            this.button_addList.Size = new System.Drawing.Size(99, 23);
-            this.button_addList.TabIndex = 12;
-            this.button_addList.Text = "Add/modify";
-            this.button_addList.UseVisualStyleBackColor = true;
-            this.button_addList.Click += new System.EventHandler(this.button_addList_Click);
+            this.ButtonAddList.Location = new System.Drawing.Point(323, 137);
+            this.ButtonAddList.Name = "ButtonAddList";
+            this.ButtonAddList.Size = new System.Drawing.Size(99, 23);
+            this.ButtonAddList.TabIndex = 12;
+            this.ButtonAddList.Text = "Add/modify";
+            this.ButtonAddList.UseVisualStyleBackColor = true;
+            this.ButtonAddList.Click += new System.EventHandler(this.ButtonAddListClick);
             // 
-            // button_delete_list
+            // ButtonDeleteList
             // 
-            this.button_delete_list.Location = new System.Drawing.Point(469, 135);
-            this.button_delete_list.Name = "button_delete_list";
-            this.button_delete_list.Size = new System.Drawing.Size(75, 23);
-            this.button_delete_list.TabIndex = 14;
-            this.button_delete_list.Text = "Delete";
-            this.button_delete_list.UseVisualStyleBackColor = true;
-            this.button_delete_list.Click += new System.EventHandler(this.button_delete_list_Click);
+            this.ButtonDeleteList.Location = new System.Drawing.Point(469, 135);
+            this.ButtonDeleteList.Name = "ButtonDeleteList";
+            this.ButtonDeleteList.Size = new System.Drawing.Size(75, 23);
+            this.ButtonDeleteList.TabIndex = 14;
+            this.ButtonDeleteList.Text = "Delete";
+            this.ButtonDeleteList.UseVisualStyleBackColor = true;
+            this.ButtonDeleteList.Click += new System.EventHandler(this.ButtonDeleteListClick);
             // 
-            // button_SaveFile
+            // ButtonSaveFile
             // 
-            this.button_SaveFile.Location = new System.Drawing.Point(229, 491);
-            this.button_SaveFile.Name = "button_SaveFile";
-            this.button_SaveFile.Size = new System.Drawing.Size(100, 23);
-            this.button_SaveFile.TabIndex = 15;
-            this.button_SaveFile.Text = "Save File";
-            this.button_SaveFile.UseVisualStyleBackColor = true;
-            this.button_SaveFile.Click += new System.EventHandler(this.button_SaveFile_Click);
+            this.ButtonSaveFile.Location = new System.Drawing.Point(111, 494);
+            this.ButtonSaveFile.Name = "ButtonSaveFile";
+            this.ButtonSaveFile.Size = new System.Drawing.Size(100, 23);
+            this.ButtonSaveFile.TabIndex = 15;
+            this.ButtonSaveFile.Text = "Save File";
+            this.ButtonSaveFile.UseVisualStyleBackColor = true;
+            this.ButtonSaveFile.Click += new System.EventHandler(this.ButtonSaveFileClick);
             // 
             // label_calendar_Price
             // 
@@ -247,31 +248,42 @@
             // filesToolStripMenuItem
             // 
             this.filesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.openFileToolStripMenuItem,
-            this.saveFileToolStripMenuItem});
+            this.OpenFileToolStripMenuItem,
+            this.SaveFileToolStripMenuItem});
             this.filesToolStripMenuItem.Name = "filesToolStripMenuItem";
-            this.filesToolStripMenuItem.Size = new System.Drawing.Size(42, 20);
+            this.filesToolStripMenuItem.Size = new System.Drawing.Size(41, 20);
             this.filesToolStripMenuItem.Text = "files";
             // 
-            // openFileToolStripMenuItem
+            // OpenFileToolStripMenuItem
             // 
-            this.openFileToolStripMenuItem.Name = "openFileToolStripMenuItem";
-            this.openFileToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
-            this.openFileToolStripMenuItem.Text = "Open File";
-            this.openFileToolStripMenuItem.Click += new System.EventHandler(this.openFileToolStripMenuItem_Click);
+            this.OpenFileToolStripMenuItem.Name = "OpenFileToolStripMenuItem";
+            this.OpenFileToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.OpenFileToolStripMenuItem.Text = "Open File";
+            this.OpenFileToolStripMenuItem.Click += new System.EventHandler(this.OpenFileToolStripMenuItemClick);
             // 
-            // saveFileToolStripMenuItem
+            // SaveFileToolStripMenuItem
             // 
-            this.saveFileToolStripMenuItem.Name = "saveFileToolStripMenuItem";
-            this.saveFileToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
-            this.saveFileToolStripMenuItem.Text = "Save File";
-            this.saveFileToolStripMenuItem.Click += new System.EventHandler(this.saveFileToolStripMenuItem_Click);
+            this.SaveFileToolStripMenuItem.Name = "SaveFileToolStripMenuItem";
+            this.SaveFileToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.SaveFileToolStripMenuItem.Text = "Save File";
+            this.SaveFileToolStripMenuItem.Click += new System.EventHandler(this.SaveFileToolStripMenuItemClick);
             // 
-            // Form_Main
+            // ButtonCheckSaveToExcel
+            // 
+            this.ButtonCheckSaveToExcel.Location = new System.Drawing.Point(347, 494);
+            this.ButtonCheckSaveToExcel.Name = "ButtonCheckSaveToExcel";
+            this.ButtonCheckSaveToExcel.Size = new System.Drawing.Size(133, 23);
+            this.ButtonCheckSaveToExcel.TabIndex = 24;
+            this.ButtonCheckSaveToExcel.Text = "Check and save to excel";
+            this.ButtonCheckSaveToExcel.UseVisualStyleBackColor = true;
+            this.ButtonCheckSaveToExcel.Click += new System.EventHandler(this.ButtonCheckSaveToExcelClick);
+            // 
+            // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(581, 526);
+            this.ClientSize = new System.Drawing.Size(581, 556);
+            this.Controls.Add(this.ButtonCheckSaveToExcel);
             this.Controls.Add(this.label_Choose_Date);
             this.Controls.Add(this.label_Total);
             this.Controls.Add(this.label_TotalPrice);
@@ -279,23 +291,23 @@
             this.Controls.Add(this.label_Totoal_Calendar);
             this.Controls.Add(this.label_Items_Price);
             this.Controls.Add(this.label_calendar_Price);
-            this.Controls.Add(this.button_SaveFile);
-            this.Controls.Add(this.button_delete_list);
-            this.Controls.Add(this.button_addList);
-            this.Controls.Add(this.textBox_price_listview);
+            this.Controls.Add(this.ButtonSaveFile);
+            this.Controls.Add(this.ButtonDeleteList);
+            this.Controls.Add(this.ButtonAddList);
+            this.Controls.Add(this.textBox_item_price);
             this.Controls.Add(this.label_price_listview);
-            this.Controls.Add(this.textBox_item);
+            this.Controls.Add(this.textBox_item_name);
             this.Controls.Add(this.label_item);
             this.Controls.Add(this.MyListView);
             this.Controls.Add(this.label_price_calendar);
             this.Controls.Add(this.textBox_price_calendar);
             this.Controls.Add(this.label_date);
             this.Controls.Add(this.MyMonthCalendar);
-            this.Controls.Add(this.button_enter_calendar);
+            this.Controls.Add(this.ButtonEnterCalendar);
             this.Controls.Add(this.My_menuStrip);
             this.MainMenuStrip = this.My_menuStrip;
-            this.Name = "Form_Main";
-            this.Text = "Form1";
+            this.Name = "FormMain";
+            this.Text = "Accounting";
             this.My_menuStrip.ResumeLayout(false);
             this.My_menuStrip.PerformLayout();
             this.ResumeLayout(false);
@@ -305,19 +317,19 @@
 
 		#endregion
 
-		private System.Windows.Forms.Button button_enter_calendar;
+		private System.Windows.Forms.Button ButtonEnterCalendar;
 		private System.Windows.Forms.MonthCalendar MyMonthCalendar;
 		private System.Windows.Forms.Label label_date;
 		private System.Windows.Forms.TextBox textBox_price_calendar;
 		private System.Windows.Forms.Label label_price_calendar;
 		private System.Windows.Forms.ListView MyListView;
 		private System.Windows.Forms.Label label_item;
-		private System.Windows.Forms.TextBox textBox_item;
+		private System.Windows.Forms.TextBox textBox_item_name;
 		private System.Windows.Forms.Label label_price_listview;
-		private System.Windows.Forms.TextBox textBox_price_listview;
-		private System.Windows.Forms.Button button_addList;
-		private System.Windows.Forms.Button button_delete_list;
-		private System.Windows.Forms.Button button_SaveFile;
+		private System.Windows.Forms.TextBox textBox_item_price;
+		private System.Windows.Forms.Button ButtonAddList;
+		private System.Windows.Forms.Button ButtonDeleteList;
+		private System.Windows.Forms.Button ButtonSaveFile;
 		private System.Windows.Forms.Label label_calendar_Price;
 		private System.Windows.Forms.Label label_Items_Price;
 		private System.Windows.Forms.Label label_Totoal_Calendar;
@@ -327,8 +339,9 @@
 		private System.Windows.Forms.Label label_Choose_Date;
 		private System.Windows.Forms.MenuStrip My_menuStrip;
 		private System.Windows.Forms.ToolStripMenuItem filesToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem openFileToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem saveFileToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem OpenFileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem SaveFileToolStripMenuItem;
+		private System.Windows.Forms.Button ButtonCheckSaveToExcel;
 	}
 }
 
