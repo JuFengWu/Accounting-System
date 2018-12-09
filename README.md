@@ -4,11 +4,13 @@ What kinds of example?
 
 In this example I use the C# skill about
  
-1. Inherit 
-2. Language-Integrated Query (LINQ) 
-3. Event
-4. Dictionary, List
-5. Read Write files
+* Inherit 
+* Language-Integrated Query (LINQ) 
+* Event
+* Dictionary, List
+* Read Write files
+* Command pattern
+* Communicate with excel (save file to excel)
 ***********************************************************************
 How to use?
 You can type how much money you spend each date and special item that you spend.
