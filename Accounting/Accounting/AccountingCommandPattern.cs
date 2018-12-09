@@ -14,13 +14,29 @@ namespace Accounting
         }
         public void Run()
         {
-            foreach (AccountingCommand cmd in this.cmds)
+            try
             {
-                cmd.Execute();
+                foreach (AccountingCommand cmd in this.cmds)
+                {
+                    cmd.Execute();
+                }
             }
-            cmds.Clear();
+            catch (Exception ex)
+            {
+                Console.WriteLine("before show error message");
+                ShowErrorMessage(ex.ToString());
+            }
+            finally
+            {
+                cmds.Clear();
+            }
+            
         }
-
+        public static event Action<string> ShowDialogEvent = null;
+        private static void ShowErrorMessage(string s)
+        {
+            ShowDialogEvent?.Invoke(s);
+        }
         private List<AccountingCommand> cmds = new List<AccountingCommand>();
     }
 

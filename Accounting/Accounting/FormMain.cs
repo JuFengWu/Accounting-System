@@ -34,6 +34,8 @@ namespace Accounting
             readFileCommand =new ReadFileCommand(receiver,this);
             saveToExcelCommand = new SaveToExcelCommand(receiver, this);
 
+            AccountingInvoker.ShowDialogEvent += SetDialogShow;
+
             label_Choose_Date.Text = MyMonthCalendar.TodayDate.ToString("yyyy/M/d");
 
 			MyListView.GridLines = true;
@@ -68,29 +70,22 @@ namespace Accounting
 
         private void ButtonEnterCalendarClick(object sender, EventArgs e)
         {
-            bool canConvert = double.TryParse(textBox_price_calendar.Text, out double EnterCalendarPrice);
-            if (canConvert)
-            {
-                string command = CommandEncoder(true, label_Choose_Date.Text, EnterCalendarPrice);
+            
+            string command = CommandEncoder(true, label_Choose_Date.Text, textBox_price_calendar.Text);
 
-                invoker.SetCommand(modifyDateTableAndPriceCommand, command);
-                invoker.SetCommand(modifyTotalCommand, "");
-                invoker.Run();
-
-            }
-            else
-            {
-                MessageBox.Show("You should enter number!!");
-            }
+            invoker.SetCommand(modifyDateTableAndPriceCommand, command);
+            invoker.SetCommand(modifyTotalCommand, "");
+            invoker.Run();
 
         }
         private void MonthCalendar_DateSelected(object sender, DateRangeEventArgs e)
         {
-
-            label_Choose_Date.Text = MyMonthCalendar.SelectionStart.ToShortDateString();
             
+            label_Choose_Date.Text = MyMonthCalendar.SelectionStart.ToShortDateString();
+
             invoker.SetCommand(getDateMoneyCommand, label_Choose_Date.Text);
             invoker.Run();
+            
             
             if (getDateMoneyCommand.DateMoney != 0)
             {
@@ -104,116 +99,124 @@ namespace Accounting
 
         private void ButtonAddListClick(object sender, EventArgs e)
         {
-            double EnterItemPrice = 0;
-            if (null == textBox_item_name.Text)
-            {
-                MessageBox.Show("Please add item!!");
-                return;
-            }
-            else if (null == textBox_item_price.Text)
-            {
-                MessageBox.Show("Please add price on item!!");
-                return;
-            }
-            else if (!double.TryParse(textBox_item_price.Text, out EnterItemPrice))
-            {
-                MessageBox.Show("Please enter number!!");
-                return;
-            }
-            else
-            {                   
-                string addCommand = CommandEncoder(true, textBox_item_name.Text, EnterItemPrice);
+            
+            string addCommand = CommandEncoder(true, textBox_item_name.Text, textBox_item_price.Text);
 
-                invoker.SetCommand(modifyItemNameCommand, textBox_item_name.Text);
-                invoker.SetCommand(modifyItemTableNameAndPriceCommand, addCommand);
-                invoker.SetCommand(modifyTotalCommand, "");
-                invoker.Run();
-            }
+            invoker.SetCommand(modifyItemNameCommand, textBox_item_name.Text);
+            invoker.SetCommand(modifyItemTableNameAndPriceCommand, addCommand);
+            invoker.SetCommand(modifyTotalCommand, "");
+            invoker.Run();
+            
         }
         private void ButtonDeleteListClick(object sender, EventArgs e)
         {
             if (MyListView.SelectedItems.Count > 0)
-            {               
+            {
+                
                 invoker.SetCommand(deleteItemCommand, textBox_item_name.Text);
                 invoker.SetCommand(modifyTotalCommand, "");
                 invoker.Run();
+                
+                
             }
         }
         private void MyListView_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
             if (MyListView.SelectedItems.Count > 0)
             {
+               
                 invoker.SetCommand(getItemMoneyCommnad, MyListView.SelectedItems[0].Text);
                 invoker.Run();
 
                 invoker.SetCommand(modifyItemNameCommand, MyListView.SelectedItems[0].Text);
                 invoker.SetCommand(modifyItemPriceCommand, getItemMoneyCommnad.ItemMoney.ToString());
                 invoker.Run();
+                
             }
         }
         private void SaveFileToolStripMenuItemClick(object sender, EventArgs e)
         {
+            
             invoker.SetCommand(selectPathCommand, AccountingInformation.saveFileMode);
             invoker.Run();
             FilePath = selectPathCommand.Path;
             invoker.SetCommand(saveAllCommand, FilePath);
             invoker.Run();
+            
         }
 
         private void ButtonSaveFileClick(object sender, EventArgs e)
         {
+            
             if ("" == FilePath)
             {
                 invoker.SetCommand(selectPathCommand, AccountingInformation.saveFileMode);
                 invoker.Run();
                 FilePath = selectPathCommand.Path;
             }
-            
+
             invoker.SetCommand(saveAllCommand, FilePath);
             invoker.Run();
+            
         }
-        private void OpenFileToolStripMenuItemClick(object sender, EventArgs e)
+        private void OpenFileToolStripMenuItemClick(object sender, EventArgs e) // TODO: use thread
         {
+            
             invoker.SetCommand(selectPathCommand, AccountingInformation.readFileMode);
             invoker.Run();
-            
+
             FilePath = selectPathCommand.Path;
 
             invoker.SetCommand(readFileCommand, FilePath);
             invoker.Run();
 
-            foreach (KeyValuePair<string, double> entry in readFileCommand.AllDateValue.ToArray())
+            if (null != readFileCommand.AllDateValue)
             {
-                string command = CommandEncoder(true, entry.Key, entry.Value);
-                invoker.SetCommand(modifyDateTableAndPriceCommand, command);
-                invoker.Run();
+                foreach (KeyValuePair<string, double> entry in readFileCommand.AllDateValue.ToArray())
+                {
+                    string command = CommandEncoder(true, entry.Key, entry.Value.ToString());
+                    invoker.SetCommand(modifyDateTableAndPriceCommand, command);
+                    invoker.Run();
+                }
             }
 
-            foreach (KeyValuePair<string, double> entry in readFileCommand.AllItemValue.ToArray())
+            if (null != readFileCommand.AllItemValue)
             {
-                string command = CommandEncoder(true, entry.Key, entry.Value);
-                invoker.SetCommand(modifyItemTableNameAndPriceCommand, command);
-                invoker.Run();
+                foreach (KeyValuePair<string, double> entry in readFileCommand.AllItemValue.ToArray())
+                {
+                    string command = CommandEncoder(true, entry.Key, entry.Value.ToString());
+                    invoker.SetCommand(modifyItemTableNameAndPriceCommand, command);
+                    invoker.Run();
+                }
             }
 
-            invoker.SetCommand(modifyTotalCommand,"");
+            invoker.SetCommand(modifyTotalCommand, "");
             invoker.Run();
-
+            
         }
-        private void ButtonCheckSaveToExcelClick(object sender, EventArgs e)
+        private void ButtonCheckSaveToExcelClick(object sender, EventArgs e) // TODO: use thread
         {
+           
             invoker.SetCommand(selectPathCommand, AccountingInformation.saveExecelFileMode);
             invoker.Run();
 
             invoker.SetCommand(saveToExcelCommand, selectPathCommand.Path);
             invoker.Run();
+          
 
         }
         private string FilePath = "";
         
-        private string CommandEncoder(bool isAdd,string name, double price)
+        private string CommandEncoder(bool isAdd,string name, string price)
         {
-            
+            if (null == name)
+            {
+                MessageBox.Show("Please name should not be null!!");
+            }
+            else if (!double.TryParse(price, out double EnterItemPrice))
+            {
+                MessageBox.Show("Please enter a number!!");
+            }
             if (isAdd)
             {
                 return "ADD=" + name + "=" + price.ToString();
@@ -223,7 +226,17 @@ namespace Accounting
                 return AccountingInformation.modifyKeyWord +"= " + name + "=" + price.ToString(); 
             }
         }
-        
+        private void SetDialogShow(string input)
+        {
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new Action<string>(SetDialogShow), input);
+                return;
+            }// this is for protection
+            MessageBox.Show(input);
+
+        }
+
 
         public void ModifyDateNameGui(AccountingInformation backGroundInformation)
         {
@@ -275,7 +288,7 @@ namespace Accounting
 
             if (null == foundItem)
             {
-                throw new ArgumentException("backGroundInformation have no such item");
+                MessageBox.Show("backGroundInformation have no such item");
             }
             else
             {

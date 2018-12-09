@@ -78,11 +78,11 @@ namespace Accounting
             
             if (dateInformation.Length != 3)
             {
-                throw new ArgumentException("dateInformations is not correct");
+                throw new Exception("dateInformations is not correct");
             }
             if (!double.TryParse(dateInformation[2], out double datePrice))
             {
-                throw new ArithmeticException("datPrice is not double");
+                throw new Exception("datPrice is not double");
             }
             if ( (accountingInformation.dateMoneyRecord.ContainsKey(dateInformation[1]))) //dateInformation[0] == AccountingInformation.modifyKeyWord ||
             {
@@ -120,11 +120,11 @@ namespace Accounting
             string[] itemInformation = itemInformations.Split('=');
             if (itemInformation.Length != 3)
             {
-                throw new ArgumentException("itemInformations is not correct");
+                throw new Exception("itemInformations is not correct");
             }
             if (!double.TryParse(itemInformation[2], out double itemPrice))
             {
-                throw new ArithmeticException("item price is not double");
+                throw new Exception("item price is not double");
             }
             if (itemInformation[0] == AccountingInformation.modifyKeyWord || (accountingInformation.itemMonryRecord.ContainsKey(itemInformation[1])))
             {
@@ -234,8 +234,12 @@ namespace Accounting
         }
         public Tuple<Dictionary<string,double>, Dictionary<string,double>> ReadFile(string filePath)
         {
-            if (filePath != null)
+            if (null == filePath || "" == filePath)
             {
+                throw new FormatException("file is null");
+            }
+            else
+            { 
                 string[] Readlines = File.ReadAllLines(filePath);
 
                 var dateRecord = Readlines.Select(l => l.Split('=')).Where(x => x[2] == AccountingInformation.fileDateKeyWord).ToDictionary(a => a[0], a => double.Parse(a[1]));
@@ -245,11 +249,6 @@ namespace Accounting
                 accountingInformation.itemMonryRecord = itemRecord;
 
                 return Tuple.Create(dateRecord, itemRecord);
-            }
-
-            else
-            {
-                throw new Exception("file is null");
             }
         }
         public void SaveToExcel(string excelPath)
