@@ -12,6 +12,25 @@ namespace Accounting
 {
 	public partial class FormMain : Form
 	{
+		AccountingInvoker invoker;
+		InfoAccountingReceiver receiver;
+
+
+		ModifyDateNameCommand modifyDateCommnad;
+		ModifyDatePriceCommand modifyDatePriceCommand;
+		ModifyDateTableAndPriceCommand modifyDateTableAndPriceCommand;
+		ModifyItemNameCommand modifyItemNameCommand;
+		ModifyItemPriceCommand modifyItemPriceCommand;
+		ModifyItemTableNameAndPriceCommand modifyItemTableNameAndPriceCommand;
+		ModifyTotalCommand modifyTotalCommand;
+		GetDateMoneyCommand getDateMoneyCommand;
+		GetItemMoneyCommnad getItemMoneyCommnad;
+		DeleteItemCommand deleteItemCommand;
+		SelectPathCommand selectPathCommand;
+		SaveAllCommand saveAllCommand;
+		ReadFileCommand readFileCommand;
+		SaveToExcelCommand saveToExcelCommand;
+
 		public FormMain()
 		{
 			InitializeComponent();
@@ -49,24 +68,7 @@ namespace Accounting
 			MyListView.Columns.Add("Price", 50, HorizontalAlignment.Center);
 		}
 
-        AccountingInvoker invoker;
-        InfoAccountingReceiver receiver;
         
-
-        ModifyDateNameCommand modifyDateCommnad;
-        ModifyDatePriceCommand modifyDatePriceCommand;
-        ModifyDateTableAndPriceCommand modifyDateTableAndPriceCommand;
-        ModifyItemNameCommand modifyItemNameCommand;
-        ModifyItemPriceCommand modifyItemPriceCommand;
-        ModifyItemTableNameAndPriceCommand modifyItemTableNameAndPriceCommand;
-        ModifyTotalCommand modifyTotalCommand;
-        GetDateMoneyCommand getDateMoneyCommand;
-        GetItemMoneyCommnad getItemMoneyCommnad;
-        DeleteItemCommand deleteItemCommand;
-        SelectPathCommand selectPathCommand;
-        SaveAllCommand saveAllCommand;
-        ReadFileCommand readFileCommand;
-        SaveToExcelCommand saveToExcelCommand;
 
         private void ButtonEnterCalendarClick(object sender, EventArgs e)
         {
@@ -136,8 +138,8 @@ namespace Accounting
         }
         private void SaveFileToolStripMenuItemClick(object sender, EventArgs e)
         {
-            
-            invoker.SetCommand(selectPathCommand, AccountingInformation.saveFileMode);
+			selectPathCommand = new SaveFileCommand(receiver, this);
+            invoker.SetCommand(selectPathCommand, "");
             invoker.Run();
             FilePath = selectPathCommand.Path;
             invoker.SetCommand(saveAllCommand, FilePath);
@@ -150,7 +152,8 @@ namespace Accounting
             
             if ("" == FilePath)
             {
-                invoker.SetCommand(selectPathCommand, AccountingInformation.saveFileMode);
+				selectPathCommand = new SaveFileCommand(receiver, this);
+                invoker.SetCommand(selectPathCommand,"");
                 invoker.Run();
                 FilePath = selectPathCommand.Path;
             }
@@ -161,8 +164,8 @@ namespace Accounting
         }
         private void OpenFileToolStripMenuItemClick(object sender, EventArgs e) // TODO: use thread
         {
-            
-            invoker.SetCommand(selectPathCommand, AccountingInformation.readFileMode);
+			selectPathCommand = new SelectReadFileCommand(receiver, this);
+            invoker.SetCommand(selectPathCommand, "");
             invoker.Run();
 
             FilePath = selectPathCommand.Path;
@@ -196,8 +199,8 @@ namespace Accounting
         }
         private void ButtonCheckSaveToExcelClick(object sender, EventArgs e) // TODO: use thread
         {
-           
-            invoker.SetCommand(selectPathCommand, AccountingInformation.saveExecelFileMode);
+			selectPathCommand = new SaveExecelFileCommand(receiver, this);
+            invoker.SetCommand(selectPathCommand,"");
             invoker.Run();
 
             invoker.SetCommand(saveToExcelCommand, selectPathCommand.Path);

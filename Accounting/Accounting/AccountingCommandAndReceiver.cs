@@ -12,25 +12,7 @@ using Excel = Microsoft.Office.Interop.Excel;
 namespace Accounting
 {
     public struct AccountingInformation
-    {
-        public AccountingInformation(double iniDatePrice, double iniItemPrice)
-        {
-            totalPrice = iniDatePrice + iniItemPrice;
-
-            allDatePrice = iniDatePrice;
-            allItemPrice = iniItemPrice;
-
-            dateMoneyRecord = new Dictionary<string, double>();
-            itemMonryRecord = new Dictionary<string, double>();
-
-            currentDatePrice = null;
-            currentDate = null;
-            currentItemName = null;
-            currentItemPrice = null;
-        }
-
-
-        public double totalPrice;
+    {   public double totalPrice;
 
         public string currentDatePrice;
         public string currentDate;
@@ -47,18 +29,30 @@ namespace Accounting
         public const string fileItemKeyWord = "ITEM";
         public const string modifyKeyWord = "MODIFY";
 
-        public const string readFileMode = "READFILE";
-        public const string saveExecelFileMode = "SAVEEXEFILE";
-        public const string saveFileMode = "SAVEFILE";
+		public AccountingInformation(double iniDatePrice, double iniItemPrice)
+		{
+			totalPrice = iniDatePrice + iniItemPrice;
+
+			allDatePrice = iniDatePrice;
+			allItemPrice = iniItemPrice;
+
+			dateMoneyRecord = new Dictionary<string, double>();
+			itemMonryRecord = new Dictionary<string, double>();
+
+			currentDatePrice = null;
+			currentDate = null;
+			currentItemName = null;
+			currentItemPrice = null;
+		}
     }
 
     class InfoAccountingReceiver
     {
+		private AccountingInformation accountingInformation;
+
         public InfoAccountingReceiver()
         {
-            
             accountingInformation = new AccountingInformation(0, 0);
-
         }
 
         public AccountingInformation ModifyDateNameInformation(string dateName)
@@ -91,7 +85,6 @@ namespace Accounting
             }
 
             if (datePrice != 0)
-
             {
 
                 accountingInformation.dateMoneyRecord.Add(dateInformation[1], datePrice);
@@ -192,46 +185,25 @@ namespace Accounting
                 write2File.Add(line);
             }
 
-            File.WriteAllLines(filePath, write2File);
-        }
-        public string GetFilePath(string isReadFile)
-        {
-            FileDialog fileDialog;
-            if (isReadFile == AccountingInformation.readFileMode)
-            {
-                fileDialog = new OpenFileDialog
-                {
-                    Filter = "Txt file|*.txt|Acc file|*.acc",
-                    Title = "Read Account File"
-                };
+			File.WriteAllLines(filePath, write2File);
+		}
 
-            }
-            else if (isReadFile == AccountingInformation.saveExecelFileMode)
-            {
-                fileDialog = new OpenFileDialog()
-                {
-                    Filter = "excel file|*.xlsx",
-                    Title = "Save Account File"
-                };
-                
-            }
-            else if (isReadFile == AccountingInformation.saveFileMode)
-            {
-                fileDialog = new SaveFileDialog()
-                {
-                    Filter = "Txt file|*.txt|Acc file|*.acc",
-                    Title = "Save Account File"
-                };
-
-            }
-            else
-            {
-                throw new Exception("file mode is not correct");
-            }
-            
-            fileDialog.ShowDialog();
-            return fileDialog.FileName;
-        }
+		public string GetFilePath(bool isOpenFileDialog,string filterName,string title) 
+		{
+			FileDialog fileDialog;
+			if (isOpenFileDialog)
+			{
+				fileDialog = new OpenFileDialog();
+			}
+			else
+			{
+				fileDialog = new SaveFileDialog();
+			}
+			fileDialog.Filter = filterName;
+			fileDialog.Title = title;
+			fileDialog.ShowDialog();
+			return fileDialog.FileName;
+		}
         public Tuple<Dictionary<string,double>, Dictionary<string,double>> ReadFile(string filePath)
         {
             if (null == filePath || "" == filePath)
@@ -251,66 +223,56 @@ namespace Accounting
                 return Tuple.Create(dateRecord, itemRecord);
             }
         }
+		private void WriteDateToExecl(ref int excelCellIndex, Excel.Application app, Dictionary<string, double> saveDictory)
+		{
+			foreach (KeyValuePair<string, double> item in saveDictory)
+			{
+				excelCellIndex++;
+				app.Cells[excelCellIndex, 1] = item.Key;
+				app.Cells[excelCellIndex, 2] = item.Value.ToString();
+			}
+		}
+		private Tuple<Excel.Application, Excel.Workbook> InitialExcel(string excelPath) 
+		{
+			Excel.Application app = new Excel.Application();
+			if (null == app)
+			{
+				throw new Exception("Excel is not properly installed!!");
+
+			}
+			Excel.Workbook workBook;
+
+			if (!File.Exists(excelPath))
+			{
+				workBook = app.Workbooks.Add();
+			}
+			else
+			{
+				workBook = app.Workbooks.Open(excelPath);
+			}
+			Excel.Worksheet workSheet = workBook.Worksheets.Add();
+			workSheet.Name = DateTime.Now.ToString("MMMM,yyyy");
+			return Tuple.Create(app, workBook);
+		}
         public void SaveToExcel(string excelPath)
         {
-            
-
-            Excel.Application app = new Excel.Application();
-            if (null == app)
-            {
-                throw new Exception("Excel is not properly installed!!");
-
-            }
-
-            int excelCellIndex = 0;
-
-            Excel.Workbook workBook;
-
-            if (!File.Exists(excelPath))
-            {
-
-                workBook = app.Workbooks.Add();
-                
-            }
-
-            else
-            {
-                workBook = app.Workbooks.Open(excelPath);
-            }
-            
-
-            Excel.Worksheet workSheet = workBook.Worksheets.Add();
-            workSheet.Name = DateTime.Now.ToString("MMMM,yyyy");
-
-            WriteDateToExecl(ref excelCellIndex, app,accountingInformation.dateMoneyRecord);
-            WriteDateToExecl(ref excelCellIndex, app, accountingInformation.itemMonryRecord);
+			int excelCellIndex = 0;
+			var excelItem = InitialExcel(excelPath);
+			WriteDateToExecl(ref excelCellIndex, excelItem.Item1, accountingInformation.dateMoneyRecord);
+			WriteDateToExecl(ref excelCellIndex, excelItem.Item1, accountingInformation.itemMonryRecord);
             if (File.Exists(excelPath))
             {
-                workBook.SaveAs(excelPath);
+				excelItem.Item2.SaveAs(excelPath);
             }
                 
             //workBook.Close();
-            workBook.Close();
-            
-            app.Quit();
+			excelItem.Item2.Close();
+
+			excelItem.Item1.Quit();
             GC.Collect();
             GC.WaitForPendingFinalizers();
-        }
-        private void WriteDateToExecl(ref int excelCellIndex, Excel.Application app, Dictionary<string,double> saveDictory)
-        {
-            foreach (KeyValuePair<string, double> item in saveDictory)
-            {
-                excelCellIndex++;
-                app.Cells[excelCellIndex, 1] = item.Key;
-                app.Cells[excelCellIndex, 2] = item.Value.ToString();
-            }
-        }
-        private string[] SaveDataToFile(Dictionary<string, double> item, string FileKeyWord)
-        {
-            return item.Select(kvp => kvp.Key + "=" + kvp.Value + "=" + FileKeyWord).ToArray();
-        }
-
-        private AccountingInformation accountingInformation;
+        }        
+        
     }
 
     class ModifyDateNameCommand : AccountingCommand
@@ -444,18 +406,51 @@ namespace Accounting
             formMain.DeleteItemTableSubItem(accountingInformation);
         }
     }
+	
     class SelectPathCommand : AccountingCommand
     {
+		public string Path { get; private set; }
+		protected string _filterName = "Txt file|*.txt|Acc file|*.acc";
+		protected string _title = "Read Account File";
+		protected bool _isOpenFileDialog = true;
+
         public SelectPathCommand(InfoAccountingReceiver accountingInfo, FormMain formMain) : base(accountingInfo, formMain)
         {
             return;
         }
         public override void Execute()
         {
-            Path = accountingInfo.GetFilePath(CmdSting);
+			Path = accountingInfo.GetFilePath(_isOpenFileDialog, _filterName, _title);
         }
-        public string Path { get; private set; }
+        
     }
+	class SelectReadFileCommand : SelectPathCommand
+	{
+		public SelectReadFileCommand(InfoAccountingReceiver accountingInfo, FormMain formMain) : base(accountingInfo, formMain)
+        {
+			_filterName = "Txt file|*.txt|Acc file|*.acc";
+			_title = "Read Account File";
+			_isOpenFileDialog = true;
+		}
+	}
+	class SaveExecelFileCommand : SelectPathCommand
+	{
+		public SaveExecelFileCommand(InfoAccountingReceiver accountingInfo, FormMain formMain) : base(accountingInfo, formMain) 
+		{
+			_isOpenFileDialog = false;
+			_filterName = "Txt file|*.txt|Acc file|*.acc";
+			_title = "Save Account File";
+		}
+	}
+	class SaveFileCommand : SelectPathCommand 
+	{
+		public SaveFileCommand(InfoAccountingReceiver accountingInfo, FormMain formMain): base(accountingInfo, formMain) 
+		{
+			_isOpenFileDialog = true;
+			_filterName = "excel file|*.xlsx";
+			_title = "Save Account File";
+		}
+	}
     class SaveAllCommand : AccountingCommand
     {
         public SaveAllCommand(InfoAccountingReceiver accountingInfo, FormMain formMain) : base(accountingInfo, formMain)
